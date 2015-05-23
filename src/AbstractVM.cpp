@@ -66,8 +66,4 @@ void        AbstractVM::checkFileIntegrity(void)
         std::cout << "\"" << e.file << "\" " << e.what() << std::endl;
         exit(EXIT_FAILURE);
     }
-
-    auto tmp = _syntaxChecker.getTokens();
-    for (auto tok : tmp)
-        std::cout << tok << std::endl;
 }
