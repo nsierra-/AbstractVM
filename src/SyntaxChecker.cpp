@@ -91,6 +91,10 @@ bool        SyntaxChecker::_instructionIsValid(const std::string &line, unsigned
     else
         to_process = line;
     to_process = trim(to_process);
+
+    if (to_process[0] == ';' || to_process.empty())
+        return true;
+
     std::regex_match(to_process, sm, _instructionPattern);
 
     if (sm.size() == 0)
