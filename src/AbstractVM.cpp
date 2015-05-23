@@ -48,22 +48,11 @@ void        AbstractVM::checkFileIntegrity(void)
 {
     try {
         _syntaxChecker.analyzeFile();
-    } catch (const SyntaxChecker::InvalidInstructionException &e) {
-        std::cout 
-            << "\"" << e.line << "\""
-            << " (line " << e.lineNumber << ") "
-            << e.what() << std::endl
-        ;
-        exit(EXIT_FAILURE);
-    } catch (const SyntaxChecker::InvalidValueException &e) {
-        std::cout 
-            << "\"" << e.line << "\""
-            << " (line " << e.lineNumber << ") "
-            << e.what() << std::endl
-        ;
-        exit(EXIT_FAILURE);
-    } catch (const SyntaxChecker::FileOpeningFailException &e) {
-        std::cout << "\"" << e.file << "\" " << e.what() << std::endl;
+    } catch (const SyntaxChecker::SyntaxCheckerException &e) {
+        std::cout << e.what() << std::endl;
         exit(EXIT_FAILURE);
     }
+
+    for (auto &tok : _syntaxChecker.getTokens())
+        std::cout << tok << std::endl;
 }

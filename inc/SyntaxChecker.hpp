@@ -32,37 +32,52 @@ class   SyntaxChecker
         void                        setFilename(const std::string &filename);
         void                        analyzeFile(void);
 
-        class   InvalidInstructionException : public std::exception
+        class   SyntaxCheckerException : public std::exception
+        {
+            public:
+                SyntaxCheckerException();
+                SyntaxCheckerException(SyntaxCheckerException const &src);
+                virtual ~SyntaxCheckerException(void) throw();
+
+                SyntaxCheckerException &operator=(SyntaxCheckerException const &rhs);
+
+                virtual const char *what() const throw();
+
+                size_t                  lineNumber;
+                std::string             line;
+        };
+
+        class   NoEndTokenException : public SyntaxCheckerException
+        {
+            public:
+                NoEndTokenException();
+                NoEndTokenException(NoEndTokenException const &src);
+                virtual ~NoEndTokenException(void) throw();
+
+                virtual const char *what() const throw();
+        };
+
+        class   InvalidInstructionException : public SyntaxCheckerException
         {
             public:
                 InvalidInstructionException();
                 InvalidInstructionException(InvalidInstructionException const &src);
                 virtual ~InvalidInstructionException(void) throw();
 
-                InvalidInstructionException &operator=(InvalidInstructionException const &rhs);
-
                 virtual const char *what() const throw();
-
-                size_t                  lineNumber;
-                std::string             line;
         };
 
-        class   InvalidValueException : public std::exception
+        class   InvalidValueException : public SyntaxCheckerException
         {
             public:
                 InvalidValueException();
                 InvalidValueException(InvalidValueException const &src);
                 virtual ~InvalidValueException(void) throw();
 
-                InvalidValueException &operator=(InvalidValueException const &rhs);
-
                 virtual const char *what() const throw();
-
-                size_t                  lineNumber;
-                std::string             line;
         };
 
-        class   FileOpeningFailException : public std::exception
+        class   FileOpeningFailException : public SyntaxCheckerException
         {
             public:
                 FileOpeningFailException();
@@ -83,10 +98,12 @@ class   SyntaxChecker
         static const std::regex     _valuePattern;
 
         bool                                        _valid;
+        bool                                        _endTokenFound;
         std::vector<std::string>                    _tokens;
         std::vector<std::pair<unsigned int, SCVerifyFun>    >   _instructionsIndex;
 
         InvalidInstructionException _invalidInstructionEx;
+        NoEndTokenException         _noEndTokenEx;
         InvalidValueException       _invalidValueEx;
         FileOpeningFailException    _fileOpeningFailEx;
 

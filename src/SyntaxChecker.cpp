@@ -21,7 +21,7 @@
 #include <fstream>
 
 const char          SyntaxChecker::_commentChar = ';';
-const std::regex    SyntaxChecker::_instructionPattern("(push)\\s+(\\S+)|(pop)|(dump)|(assert)\\s+(\\S+)|(add)|(sub)|(mul)|(div)|(mod)|(print)|(exit)");
+const std::regex    SyntaxChecker::_instructionPattern("\\s*(push)\\s+(\\S+)\\s*(?:;?.*)|\\s*(pop)\\s*(?:;?.*)|\\s*(dump)\\s*(?:;?.*)|\\s*(assert)\\s+(\\S+)\\s*(?:;?.*)|\\s*(add)\\s*(?:;?.*)|\\s*(sub)\\s*(?:;?.*)|\\s*(mul)\\s*(?:;?.*)|\\s*(div)\\s*(?:;?.*)|\\s*(mod)\\s*(?:;?.*)|\\s*(print)\\s*(?:;?.*)|\\s*(exit)\\s*(?:;?.*)|\\s*(;;)\\s*(?:;?.*)|\\s*");
 const std::regex    SyntaxChecker::_valuePattern("(int8)\\(([-+]?\\d+)\\)|(int16)\\(([-+]?\\d+)\\)|(int32)\\(([-+]?\\d+)\\)|(float)\\(([-+]?[0-9]+\\.[0-9]+)\\)|(double)\\(([-+]?[0-9]+\\.[0-9]+)\\)");
 
 static inline std::string &ltrim(std::string &s) {
@@ -43,6 +43,7 @@ static inline std::string &trim(std::string &s) {
 SyntaxChecker::SyntaxChecker(const std::string filename, bool valid) :
     _filename(filename),
     _valid(valid),
+    _endTokenFound(false),
     _tokens()
 {
     _instructionsIndex.push_back(std::make_pair<unsigned int, SCVerifyFun>(1, &SyntaxChecker::_valueValidation));
@@ -56,6 +57,7 @@ SyntaxChecker::SyntaxChecker(const std::string filename, bool valid) :
     _instructionsIndex.push_back(std::make_pair<unsigned int, SCVerifyFun>(11, &SyntaxChecker::_simpleValidation));
     _instructionsIndex.push_back(std::make_pair<unsigned int, SCVerifyFun>(12, &SyntaxChecker::_simpleValidation));
     _instructionsIndex.push_back(std::make_pair<unsigned int, SCVerifyFun>(13, &SyntaxChecker::_simpleValidation));
+    _instructionsIndex.push_back(std::make_pair<unsigned int, SCVerifyFun>(14, &SyntaxChecker::_simpleValidation));
 }
 
 SyntaxChecker::SyntaxChecker(SyntaxChecker const & src) :
@@ -84,21 +86,19 @@ bool        SyntaxChecker::_instructionIsValid(const std::string &line, unsigned
     std::smatch     sm;
     std::string     tmp;
     std::string     to_process;
-    size_t          comment_char_pos;
 
-    if ((comment_char_pos = line.find(_commentChar)) != std::string::npos)
-        to_process = line.substr(0, comment_char_pos);
-    else
-        to_process = line;
-    to_process = trim(to_process);
+    // tmp = line;
+    // to_process = trim(tmp);
+    // if ((to_process[0] == ';' && to_process != ";;") || to_process.empty())
+    //     return true;
 
-    if (to_process[0] == ';' || to_process.empty())
-        return true;
-
-    std::regex_match(to_process, sm, _instructionPattern);
+    std::regex_match(line, sm, _instructionPattern);
 
     if (sm.size() == 0)
-        return false;
+        return tmp = line, trim(tmp)[0] == ';';
+
+    if (static_cast<std::string>(sm[14]) == ";;")
+        _endTokenFound = true;
 
     for (auto &i : _instructionsIndex)
     {
@@ -138,6 +138,12 @@ void        SyntaxChecker::analyzeFile(void)
             throw _invalidInstructionEx;
         }
         ++lineNumber;
+    }
+    if (!_endTokenFound)
+    {
+        _noEndTokenEx.lineNumber = lineNumber;
+        _noEndTokenEx.line = line;
+        throw _noEndTokenEx;
     }
     _valid = true;
 }
@@ -179,32 +185,58 @@ bool                        SyntaxChecker::isValid(void) const  { return _valid;
 /*
 **
 */
-SyntaxChecker::InvalidInstructionException::InvalidInstructionException() { }
-SyntaxChecker::InvalidInstructionException::InvalidInstructionException(SyntaxChecker::InvalidInstructionException const & src) { *this = src; }
-SyntaxChecker::InvalidInstructionException::~InvalidInstructionException(void) throw() { }
-SyntaxChecker::InvalidInstructionException  &SyntaxChecker::InvalidInstructionException::operator=(SyntaxChecker::InvalidInstructionException const & rhs)
+SyntaxChecker::SyntaxCheckerException::SyntaxCheckerException() { }
+SyntaxChecker::SyntaxCheckerException::SyntaxCheckerException(SyntaxChecker::SyntaxCheckerException const & src) { *this = src; }
+SyntaxChecker::SyntaxCheckerException::~SyntaxCheckerException(void) throw() { }
+SyntaxChecker::SyntaxCheckerException  &SyntaxChecker::SyntaxCheckerException::operator=(SyntaxChecker::SyntaxCheckerException const & rhs)
 {
     lineNumber = rhs.lineNumber;
     line = rhs.line;
     return *this;
 }
+const char  *SyntaxChecker::SyntaxCheckerException::what() const throw()
+{
+    return "Syntax Checker Exception (You should not see this)";
+}
+
+SyntaxChecker::NoEndTokenException::NoEndTokenException() { }
+SyntaxChecker::NoEndTokenException::NoEndTokenException(SyntaxChecker::NoEndTokenException const & src) { *this = src; }
+SyntaxChecker::NoEndTokenException::~NoEndTokenException(void) throw() { }
+const char  *SyntaxChecker::NoEndTokenException::what() const throw()
+{
+    return "End of program token (;;) not found.";
+}
+
+SyntaxChecker::InvalidInstructionException::InvalidInstructionException() { }
+SyntaxChecker::InvalidInstructionException::InvalidInstructionException(SyntaxChecker::InvalidInstructionException const & src) { *this = src; }
+SyntaxChecker::InvalidInstructionException::~InvalidInstructionException(void) throw() { }
 const char  *SyntaxChecker::InvalidInstructionException::what() const throw()
 {
-    return "Invalid Instruction.";
+    static std::stringstream   ss;
+
+    ss.str("");
+    ss 
+        << "\"" << line << "\"" << std::endl
+        << "(line " << lineNumber << ") "
+        << "Invalid Instruction."
+    ;
+    return ss.str().c_str();
 }
 
 SyntaxChecker::InvalidValueException::InvalidValueException() { }
 SyntaxChecker::InvalidValueException::InvalidValueException(SyntaxChecker::InvalidValueException const & src) { *this = src; }
 SyntaxChecker::InvalidValueException::~InvalidValueException(void) throw() { }
-SyntaxChecker::InvalidValueException    &SyntaxChecker::InvalidValueException::operator=(SyntaxChecker::InvalidValueException const & rhs)
-{
-    lineNumber = rhs.lineNumber;
-    line = rhs.line;
-    return *this;
-}
 const char  *SyntaxChecker::InvalidValueException::what() const throw()
 {
-    return "Invalid Value.";
+    static std::stringstream   ss;
+
+    ss.str("");
+    ss 
+        << "\"" << line << "\"" << std::endl
+        << "(line " << lineNumber << ") "
+        << "Invalid Value."
+    ;
+    return ss.str().c_str();
 }
 
 SyntaxChecker::FileOpeningFailException::FileOpeningFailException() { }
@@ -217,5 +249,12 @@ SyntaxChecker::FileOpeningFailException &SyntaxChecker::FileOpeningFailException
 }
 const char  *SyntaxChecker::FileOpeningFailException::what() const throw()
 {
-    return "Error while opening file. Please check you entered a valid path.";
+    static std::stringstream    ss;
+
+    ss.str("");
+    ss
+        << "\"" << file << "\" " << std::endl
+        << "Error while opening file. Please check you entered a valid path."
+    ;
+    return ss.str().c_str();
 }
