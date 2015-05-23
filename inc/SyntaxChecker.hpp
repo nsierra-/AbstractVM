@@ -78,6 +78,7 @@ class   SyntaxChecker
 
     private:
         std::string                 _filename;
+        static const char           _commentChar;
         static const std::regex     _instructionPattern;
         static const std::regex     _valuePattern;
 

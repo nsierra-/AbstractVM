@@ -20,8 +20,25 @@
 #include <vector>
 #include <fstream>
 
+const char          SyntaxChecker::_commentChar = ';';
 const std::regex    SyntaxChecker::_instructionPattern("(push)\\s+(\\S+)|(pop)|(dump)|(assert)\\s+(\\S+)|(add)|(sub)|(mul)|(div)|(mod)|(print)|(exit)");
 const std::regex    SyntaxChecker::_valuePattern("(int8)\\(([-+]?\\d+)\\)|(int16)\\(([-+]?\\d+)\\)|(int32)\\(([-+]?\\d+)\\)|(float)\\(([-+]?[0-9]+\\.[0-9]+)\\)|(double)\\(([-+]?[0-9]+\\.[0-9]+)\\)");
+
+static inline std::string &ltrim(std::string &s) {
+        s.erase(s.begin(), std::find_if(s.begin(), s.end(), std::not1(std::ptr_fun<int, int>(std::isspace))));
+        return s;
+}
+
+// trim from end
+static inline std::string &rtrim(std::string &s) {
+        s.erase(std::find_if(s.rbegin(), s.rend(), std::not1(std::ptr_fun<int, int>(std::isspace))).base(), s.end());
+        return s;
+}
+
+// trim from both ends
+static inline std::string &trim(std::string &s) {
+        return ltrim(rtrim(s));
+}
 
 SyntaxChecker::SyntaxChecker(const std::string filename, bool valid) :
     _filename(filename),
@@ -66,8 +83,15 @@ bool        SyntaxChecker::_instructionIsValid(const std::string &line, unsigned
 {
     std::smatch     sm;
     std::string     tmp;
+    std::string     to_process;
+    size_t          comment_char_pos;
 
-    std::regex_match(line, sm, _instructionPattern);
+    if ((comment_char_pos = line.find(_commentChar)) != std::string::npos)
+        to_process = line.substr(0, comment_char_pos);
+    else
+        to_process = line;
+    to_process = trim(to_process);
+    std::regex_match(to_process, sm, _instructionPattern);
 
     if (sm.size() == 0)
         return false;
@@ -140,13 +164,6 @@ bool                        SyntaxChecker::_valueValidation(const std::smatch &m
         if (!static_cast<std::string>(tok).empty())
             _tokens.push_back(static_cast<std::string>(tok));
     }
-    return true;
-}
-
-bool                        SyntaxChecker::_assertValidation(const std::smatch &matches, unsigned int i)
-{
-    _tokens.push_back(matches[i]);
-    _tokens.push_back(matches[i + 1]);
     return true;
 }
 
