@@ -53,6 +53,6 @@ void        AbstractVM::checkFileIntegrity(void)
         exit(EXIT_FAILURE);
     }
 
-    for (auto &tok : _syntaxChecker.getTokens())
-        std::cout << tok << std::endl;
+    // for (auto &tok : _syntaxChecker.getTokens())
+    //     std::cout << tok << std::endl;
 }
