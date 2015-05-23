@@ -92,8 +92,7 @@ class   SyntaxChecker
         bool                        _instructionIsValid(const std::string &line, unsigned int lineNumber);
 
         bool                        _simpleValidation(const std::smatch &matches, unsigned int i);
-        bool                        _pushValidation(const std::smatch &matches, unsigned int i);
-        bool                        _assertValidation(const std::smatch &matche, unsigned int i);
+        bool                        _valueValidation(const std::smatch &matches, unsigned int i);
 };
 
 #endif /* SYNTAXCHECKER_HPP */

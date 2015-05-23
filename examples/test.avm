@@ -1,2 +1,2 @@
 add
-push double(6.5)
+assert double(4985.0)

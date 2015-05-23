@@ -67,7 +67,6 @@ void        AbstractVM::checkFileIntegrity(void)
         exit(EXIT_FAILURE);
     }
 
-    std::cout << "LIL" << std::endl;
     auto tmp = _syntaxChecker.getTokens();
     for (auto tok : tmp)
         std::cout << tok << std::endl;

@@ -21,17 +21,17 @@
 #include <fstream>
 
 const std::regex    SyntaxChecker::_instructionPattern("(push)\\s+(\\S+)|(pop)|(dump)|(assert)\\s+(\\S+)|(add)|(sub)|(mul)|(div)|(mod)|(print)|(exit)");
-const std::regex    SyntaxChecker::_valuePattern("int8\\([-+]?\\d+\\)|int16\\([-+]?\\d+\\)|int32\\([-+]?\\d+\\)|float\\([-+]?[0-9]+\\.[0-9]+\\)|double\\([-+]?[0-9]+\\.[0-9]+\\)");
+const std::regex    SyntaxChecker::_valuePattern("(int8)\\(([-+]?\\d+)\\)|(int16)\\(([-+]?\\d+)\\)|(int32)\\(([-+]?\\d+)\\)|(float)\\(([-+]?[0-9]+\\.[0-9]+)\\)|(double)\\(([-+]?[0-9]+\\.[0-9]+)\\)");
 
 SyntaxChecker::SyntaxChecker(const std::string filename, bool valid) :
     _filename(filename),
     _valid(valid),
     _tokens()
 {
-    _instructionsIndex.push_back(std::make_pair<unsigned int, SCVerifyFun>(1, &SyntaxChecker::_pushValidation));
+    _instructionsIndex.push_back(std::make_pair<unsigned int, SCVerifyFun>(1, &SyntaxChecker::_valueValidation));
     _instructionsIndex.push_back(std::make_pair<unsigned int, SCVerifyFun>(3, &SyntaxChecker::_simpleValidation));
     _instructionsIndex.push_back(std::make_pair<unsigned int, SCVerifyFun>(4, &SyntaxChecker::_simpleValidation));
-    _instructionsIndex.push_back(std::make_pair<unsigned int, SCVerifyFun>(5, &SyntaxChecker::_assertValidation));
+    _instructionsIndex.push_back(std::make_pair<unsigned int, SCVerifyFun>(5, &SyntaxChecker::_valueValidation));
     _instructionsIndex.push_back(std::make_pair<unsigned int, SCVerifyFun>(7, &SyntaxChecker::_simpleValidation));
     _instructionsIndex.push_back(std::make_pair<unsigned int, SCVerifyFun>(8, &SyntaxChecker::_simpleValidation));
     _instructionsIndex.push_back(std::make_pair<unsigned int, SCVerifyFun>(9, &SyntaxChecker::_simpleValidation));
@@ -120,16 +120,26 @@ bool                        SyntaxChecker::_simpleValidation(const std::smatch &
     return true;
 }
 
-bool                        SyntaxChecker::_pushValidation(const std::smatch &matches, unsigned int i)
+bool                        SyntaxChecker::_valueValidation(const std::smatch &matches, unsigned int i)
 {
     std::smatch             sm;
     std::string             tmp = matches[i + 1];
+    int                     j = 0;
 
     std::regex_match(tmp, sm, _valuePattern);
+
+
     if (sm.size() == 0)
         return false;
+
     _tokens.push_back(matches[i]);
-    _tokens.push_back(matches[i + 1]);
+    for (auto &tok : sm)
+    {
+        if (j == 0 && (j = 1))
+            continue ;
+        if (!static_cast<std::string>(tok).empty())
+            _tokens.push_back(static_cast<std::string>(tok));
+    }
     return true;
 }
 
