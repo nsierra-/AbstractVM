@@ -14,7 +14,7 @@
 #ifndef OPERANDTYPE_HPP
 # define OPERANDTYPE_HPP
 
-typedef enum
+typedef enum : int
 {
 	UNDEF,
 	INT8,

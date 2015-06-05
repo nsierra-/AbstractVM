@@ -14,6 +14,7 @@
 #ifndef Operand_HPP
 # define Operand_HPP
 
+# include <vector>
 # include "IOperand.hpp"
 # include "OperandType.hpp"
 
@@ -38,8 +39,9 @@ class	Operand : public IOperand
 		virtual std::string const & toString(void ) const;
 
 	private:
-		const eOperandType	_type;
-		T					_val;
+		// static const std::vector<Mapping>	_mapping;
+		const eOperandType					_type;
+		T									_val;
 };
 
 #endif /* Operand_HPP */

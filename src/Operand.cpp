@@ -35,7 +35,7 @@ Operand<T>::~Operand(void)
 }
 
 template<typename T>
-Operand<T>	&Operand<T>::operator=(Operand const & rhs)
+Operand<T>	&Operand<T>::operator=(Operand const &rhs)
 {
 	if (this != &rhs)
 		_val = rhs._val;
@@ -55,31 +55,31 @@ eOperandType 		Operand<T>::getType(void) const
 }
 
 template<typename T>
-IOperand const * 	Operand<T>::operator+(IOperand const & rhs) const
+IOperand const		*Operand<T>::operator+(IOperand const &rhs) const
 {
 
 }
 
 template<typename T>
-IOperand const * 	Operand<T>::operator-(IOperand const & rhs) const
+IOperand const		*Operand<T>::operator-(IOperand const &rhs) const
 {
 
 }
 
 template<typename T>
-IOperand const * 	Operand<T>::operator*(IOperand const & rhs) const
+IOperand const		*Operand<T>::operator*(IOperand const &rhs) const
 {
 
 }
 
 template<typename T>
-IOperand const * 	Operand<T>::operator/(IOperand const & rhs) const
+IOperand const		*Operand<T>::operator/(IOperand const &rhs) const
 {
 
 }
 
 template<typename T>
-IOperand const * 	Operand<T>::operator%(IOperand const & rhs) const
+IOperand const		*Operand<T>::operator%(IOperand const &rhs) const
 {
 
 }
