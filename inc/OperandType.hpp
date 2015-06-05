@@ -16,6 +16,7 @@
 
 typedef enum
 {
+	UNDEF,
 	INT8,
 	INT16,
 	INT32,

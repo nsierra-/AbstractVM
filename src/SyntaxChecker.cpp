@@ -3,8 +3,8 @@
             :             :   File       : SyntaxChecker.cpp
            :               :  Creation   : 2015-05-17 05:06:13
            :      _/|      :  Last Edit  : 2015-05-17 07:50:58
-            :   =/_/      :   Author     : nsierra-   
-             `._/ |     .'    Mail       : nsierra-@student.42.fr  
+            :   =/_/      :   Author     : nsierra-
+             `._/ |     .'    Mail       : nsierra-@student.42.fr
           (   /  ,|...-'
            \_/^\/||__
         _/~  `""~`"` \_
@@ -215,7 +215,7 @@ const char  *SyntaxChecker::InvalidInstructionException::what() const throw()
     static std::stringstream   ss;
 
     ss.str("");
-    ss 
+    ss
         << "\"" << line << "\"" << std::endl
         << "(line " << lineNumber << ") "
         << "Invalid Instruction."
@@ -231,7 +231,7 @@ const char  *SyntaxChecker::InvalidValueException::what() const throw()
     static std::stringstream   ss;
 
     ss.str("");
-    ss 
+    ss
         << "\"" << line << "\"" << std::endl
         << "(line " << lineNumber << ") "
         << "Invalid Value."
