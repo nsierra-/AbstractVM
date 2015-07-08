@@ -19,7 +19,8 @@ INC_DIR				=	inc/
 CLASS_SRC_SUFFIX	=	.cpp
 CLASS_INC_SUFFIX	=	.hpp
 CLASSES				=	AbstractVM \
-						SyntaxChecker
+						SyntaxChecker \
+						SyntaxCheckerExceptions
 
 INTERF_SRC_SUFFIX	=	.cpp
 INTERF_INC_SUFFIX	=	.hpp
@@ -43,8 +44,7 @@ SRC_FILES			=	$(addsuffix $(CLASS_SRC_SUFFIX), $(CLASSES))		\
 						$(addsuffix $(INTERF_SRC_SUFFIX), $(INTERFACES))	\
 						$(addsuffix $(ABSTR_SRC_SUFFIX), $(ABSTRACTS))		\
 						$(addsuffix $(TEMPL_SRC_SUFFIX), $(TEMPLATES))		\
-						main.cpp \
-						SyntaxCheckerExceptions.cpp
+						main.cpp
 
 SRC					=	$(addprefix $(SRC_DIR), $(SRC_FILES))
 INC					=	$(addprefix $(INC_DIR), $(INC_FILES))

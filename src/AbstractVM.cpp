@@ -62,7 +62,7 @@ void		AbstractVM::getProgram(void (SyntaxChecker::* p)())
 {
 	try {
 		(_syntaxChecker.*p)();
-	} catch (const SyntaxChecker::SyntaxCheckerException & e) {
+	} catch (const SyntaxCheckerException & e) {
 		std::cout << e.what() << std::endl;
 		exit(EXIT_FAILURE);
 	}

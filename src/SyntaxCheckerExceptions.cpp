@@ -2,7 +2,7 @@
 //             .'         `.
 //            :             :        File       : SyntaxCheckerExceptions.cpp
 //           :               :       Creation   : 2015-07-08 03:37:51
-//           :      _/|      :       Last Edit  : 2015-07-08 08:20:58
+//           :      _/|      :       Last Edit  : 2015-07-08 08:33:47
 //            :   =/_/      :        Author     : nsierra-
 //             `._/ |     .'         Mail       : nsierra-@student.42.fr
 //          (   /  ,|...-'
@@ -13,91 +13,91 @@
 
 #include "SyntaxChecker.hpp"
 
-SyntaxChecker::SyntaxCheckerException::SyntaxCheckerException()
+SyntaxCheckerException::SyntaxCheckerException()
 {
 
 }
 
-SyntaxChecker::SyntaxCheckerException::SyntaxCheckerException(SyntaxChecker::SyntaxCheckerException const & src)
+SyntaxCheckerException::SyntaxCheckerException(SyntaxCheckerException const & src)
 {
 	*this = src;
 }
 
-SyntaxChecker::SyntaxCheckerException::~SyntaxCheckerException(void) throw()
+SyntaxCheckerException::~SyntaxCheckerException(void) throw()
 {
 
 }
 
-SyntaxChecker::SyntaxCheckerException  &SyntaxChecker::SyntaxCheckerException::operator=(SyntaxChecker::SyntaxCheckerException const & rhs)
+SyntaxCheckerException  &SyntaxCheckerException::operator=(SyntaxCheckerException const & rhs)
 {
 	lineNumber = rhs.lineNumber;
 	line = rhs.line;
 	return *this;
 }
-const char *	SyntaxChecker::SyntaxCheckerException::what() const throw()
+const char *	SyntaxCheckerException::what() const throw()
 {
  return "Syntax Checker Exception (You should not see this)";
 }
 
 
-SyntaxChecker::NoEndTokenException::NoEndTokenException()
+NoEndTokenException::NoEndTokenException()
 {
 
 }
 
-SyntaxChecker::NoEndTokenException::NoEndTokenException(SyntaxChecker::NoEndTokenException const & src)
+NoEndTokenException::NoEndTokenException(NoEndTokenException const & src)
 {
  *this = src;
 }
 
-SyntaxChecker::NoEndTokenException::~NoEndTokenException(void) throw()
+NoEndTokenException::~NoEndTokenException(void) throw()
 {
 
 }
 
-const char *	SyntaxChecker::NoEndTokenException::what() const throw()
+const char *	NoEndTokenException::what() const throw()
 {
  return "End of program token (;;) not found.";
 }
 
 
-SyntaxChecker::NeedlessEndTokenException::NeedlessEndTokenException()
+NeedlessEndTokenException::NeedlessEndTokenException()
 {
 
 }
 
-SyntaxChecker::NeedlessEndTokenException::NeedlessEndTokenException(SyntaxChecker::NeedlessEndTokenException const & src)
+NeedlessEndTokenException::NeedlessEndTokenException(NeedlessEndTokenException const & src)
 {
  *this = src;
 }
 
-SyntaxChecker::NeedlessEndTokenException::~NeedlessEndTokenException(void) throw()
+NeedlessEndTokenException::~NeedlessEndTokenException(void) throw()
 {
 
 }
 
-const char *	SyntaxChecker::NeedlessEndTokenException::what() const throw()
+const char *	NeedlessEndTokenException::what() const throw()
 {
  return "Superfluous end of program token (;;) found. Use it only when using avm with stdin.";
 }
 
 
-SyntaxChecker::InvalidInstructionException::InvalidInstructionException()
+InvalidInstructionException::InvalidInstructionException()
 {
 
 }
 
-SyntaxChecker::InvalidInstructionException::InvalidInstructionException(SyntaxChecker::InvalidInstructionException const & src)
+InvalidInstructionException::InvalidInstructionException(InvalidInstructionException const & src)
 {
  *this = src;
 }
 
-SyntaxChecker::InvalidInstructionException::~InvalidInstructionException(void) throw()
+InvalidInstructionException::~InvalidInstructionException(void) throw()
 {
 
 }
 
-const char *	SyntaxChecker::InvalidInstructionException::what() const throw()
+const char *	InvalidInstructionException::what() const throw()
 {
 	static std::stringstream   ss;
 
@@ -110,22 +110,22 @@ const char *	SyntaxChecker::InvalidInstructionException::what() const throw()
 	return ss.str().c_str();
 }
 
-SyntaxChecker::InvalidValueException::InvalidValueException()
+InvalidValueException::InvalidValueException()
 {
 
 }
 
-SyntaxChecker::InvalidValueException::InvalidValueException(SyntaxChecker::InvalidValueException const & src)
+InvalidValueException::InvalidValueException(InvalidValueException const & src)
 {
  *this = src;
 }
 
-SyntaxChecker::InvalidValueException::~InvalidValueException(void) throw()
+InvalidValueException::~InvalidValueException(void) throw()
 {
 
 }
 
-const char *	SyntaxChecker::InvalidValueException::what() const throw()
+const char *	InvalidValueException::what() const throw()
 {
 	static std::stringstream   ss;
 
@@ -138,27 +138,27 @@ const char *	SyntaxChecker::InvalidValueException::what() const throw()
 	return ss.str().c_str();
 }
 
-SyntaxChecker::FileOpeningFailException::FileOpeningFailException()
+FileOpeningFailException::FileOpeningFailException()
 {
 
 }
 
-SyntaxChecker::FileOpeningFailException::FileOpeningFailException(SyntaxChecker::FileOpeningFailException const & src)
+FileOpeningFailException::FileOpeningFailException(FileOpeningFailException const & src)
 {
  *this = src;
 }
 
-SyntaxChecker::FileOpeningFailException::~FileOpeningFailException(void) throw()
+FileOpeningFailException::~FileOpeningFailException(void) throw()
 {
 
 }
 
-SyntaxChecker::FileOpeningFailException &SyntaxChecker::FileOpeningFailException::operator=(SyntaxChecker::FileOpeningFailException const & rhs)
+FileOpeningFailException &FileOpeningFailException::operator=(FileOpeningFailException const & rhs)
 {
 	file = rhs.file;
 	return *this;
 }
-const char *	SyntaxChecker::FileOpeningFailException::what() const throw()
+const char *	FileOpeningFailException::what() const throw()
 {
 	static std::stringstream    ss;
 
@@ -170,22 +170,22 @@ const char *	SyntaxChecker::FileOpeningFailException::what() const throw()
 	return ss.str().c_str();
 }
 
-SyntaxChecker::EmptyProgramException::EmptyProgramException()
+EmptyProgramException::EmptyProgramException()
 {
 
 }
 
-SyntaxChecker::EmptyProgramException::EmptyProgramException(SyntaxChecker::EmptyProgramException const & src)
+EmptyProgramException::EmptyProgramException(EmptyProgramException const & src)
 {
 	*this = src;
 }
 
-SyntaxChecker::EmptyProgramException::~EmptyProgramException(void) throw()
+EmptyProgramException::~EmptyProgramException(void) throw()
 {
 
 }
 
-const char *	SyntaxChecker::EmptyProgramException::what() const throw()
+const char *	EmptyProgramException::what() const throw()
 {
 	return "Program seems empty.";
 }

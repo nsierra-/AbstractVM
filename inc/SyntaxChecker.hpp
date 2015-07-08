@@ -17,6 +17,7 @@
 # include <regex>
 # include <vector>
 # include <sstream>
+# include "SyntaxCheckerExceptions.hpp"
 
 class   SyntaxChecker
 {
@@ -34,85 +35,6 @@ class   SyntaxChecker
 		void						setFile(const std::string & filename);
 		void						analyzeFile(void);
 		void						analyzeStdin(void);
-
-		class   SyntaxCheckerException : public std::exception
-		{
-			public:
-				SyntaxCheckerException();
-				SyntaxCheckerException(SyntaxCheckerException const &src);
-				virtual ~SyntaxCheckerException(void) throw();
-
-				SyntaxCheckerException &operator=(SyntaxCheckerException const &rhs);
-
-				virtual const char *what() const throw();
-
-				size_t                  lineNumber;
-				std::string             line;
-		};
-
-		class   EmptyProgramException : public SyntaxCheckerException
-		{
-			public:
-				EmptyProgramException();
-				EmptyProgramException(EmptyProgramException const &src);
-				virtual ~EmptyProgramException(void) throw();
-
-				virtual const char * what() const throw();
-		};
-
-		class   NoEndTokenException : public SyntaxCheckerException
-		{
-			public:
-				NoEndTokenException();
-				NoEndTokenException(NoEndTokenException const &src);
-				virtual ~NoEndTokenException(void) throw();
-
-				virtual const char * what() const throw();
-		};
-
-		class   NeedlessEndTokenException : public SyntaxCheckerException
-		{
-			public:
-				NeedlessEndTokenException();
-				NeedlessEndTokenException(NeedlessEndTokenException const &src);
-				virtual ~NeedlessEndTokenException(void) throw();
-
-				virtual const char * what() const throw();
-		};
-
-		class   InvalidInstructionException : public SyntaxCheckerException
-		{
-			public:
-				InvalidInstructionException();
-				InvalidInstructionException(InvalidInstructionException const &src);
-				virtual ~InvalidInstructionException(void) throw();
-
-				virtual const char * what() const throw();
-		};
-
-		class   InvalidValueException : public SyntaxCheckerException
-		{
-			public:
-				InvalidValueException();
-				InvalidValueException(InvalidValueException const &src);
-				virtual ~InvalidValueException(void) throw();
-
-				virtual const char * what() const throw();
-		};
-
-		class   FileOpeningFailException : public SyntaxCheckerException
-		{
-			public:
-				FileOpeningFailException();
-				FileOpeningFailException(FileOpeningFailException const &src);
-				virtual ~FileOpeningFailException(void) throw();
-
-				FileOpeningFailException &operator=(FileOpeningFailException const &rhs);
-
-				virtual const char * what() const throw();
-
-				std::string             file;
-		};
 
 	private:
 		std::string					_filename;
