@@ -2,7 +2,7 @@
 //             .'         `.
 //            :             :        File       : IOperand.hpp
 //           :               :       Creation   : 2015-05-23 06:29:13
-//           :      _/|      :       Last Edit  : 2015-05-23 06:36:31
+//           :      _/|      :       Last Edit  : 2015-07-08 03:10:38
 //            :   =/_/      :        Author     : nsierra-
 //             `._/ |     .'         Mail       : nsierra-@student.42.fr
 //          (   /  ,|...-'
@@ -21,7 +21,7 @@ class		IOperand
 {
 	public:
 		virtual int 			getPrecision(void) const = 0; // Precision of the type of the instance
-		virtual eOperandType 	getType(void) const = 0; // Type of the instance
+		virtual eOperandType	getType(void) const = 0; // Type of the instance
 
 		virtual IOperand const * 	operator+(IOperand const & rhs) const = 0; // Sum
 		virtual IOperand const * 	operator-(IOperand const & rhs) const = 0; // Difference

@@ -16,7 +16,7 @@
 # include <string>
 # include "SyntaxChecker.hpp"
 
-class   AbstractVM
+class	AbstractVM
 {
 	public:
 		AbstractVM();
@@ -24,8 +24,9 @@ class   AbstractVM
 		AbstractVM(AbstractVM const & src);
 		AbstractVM &operator=(AbstractVM const & rhs);
 
-		void			setInputFile(const std::string &filename);
+		void			setInputFile(const std::string & filename);
 		void			checkFileIntegrity(void);
+		void			getProgramFromStdin(void);
 
 	private:
 		SyntaxChecker   _syntaxChecker;

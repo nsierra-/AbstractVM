@@ -3,8 +3,8 @@
 #            :             :   File       : Makefile
 #           :               :  Creation   : 2015-05-17 02:38:33
 #           :      _/|      :  Last Edit  : 2015-05-23 06:51:37
-#            :   =/_/      :   Author     : nsierra-   
-#             `._/ |     .'    Mail       : nsierra-@student.42.fr  
+#            :   =/_/      :   Author     : nsierra-
+#             `._/ |     .'    Mail       : nsierra-@student.42.fr
 #          (   /  ,|...-'
 #           \_/^\/||__
 #        _/~  `""~`"` \_
@@ -23,15 +23,15 @@ CLASSES				=	AbstractVM \
 
 INTERF_SRC_SUFFIX	=	.cpp
 INTERF_INC_SUFFIX	=	.hpp
-INTERFACES			=	
+INTERFACES			=
 
 ABSTR_SRC_SUFFIX	=	.cpp
 ABSTR_INC_SUFFIX	=	.hpp
-ABSTRACTS			=	
+ABSTRACTS			=
 
 TEMPL_SRC_SUFFIX	=	.cpp
 TEMPL_INC_SUFFIX	=	.hpp
-TEMPLATES			=	
+TEMPLATES			=
 
 INC_FILES			=	$(addsuffix $(CLASS_INC_SUFFIX), $(CLASSES))		\
 						$(addsuffix $(INTERF_INC_SUFFIX), $(INTERFACES))	\
@@ -43,7 +43,8 @@ SRC_FILES			=	$(addsuffix $(CLASS_SRC_SUFFIX), $(CLASSES))		\
 						$(addsuffix $(INTERF_SRC_SUFFIX), $(INTERFACES))	\
 						$(addsuffix $(ABSTR_SRC_SUFFIX), $(ABSTRACTS))		\
 						$(addsuffix $(TEMPL_SRC_SUFFIX), $(TEMPLATES))		\
-						main.cpp
+						main.cpp \
+						SyntaxCheckerExceptions.cpp
 
 SRC					=	$(addprefix $(SRC_DIR), $(SRC_FILES))
 INC					=	$(addprefix $(INC_DIR), $(INC_FILES))
@@ -52,9 +53,9 @@ OBJ					=	$(SRC:.cpp=.o)
 CC					=	clang++
 MAKE				=	make
 
-CFLAGS				=	-Wall -Wextra -Werror -std=c++11 -stdlib=libc++ #-g3
+CFLAGS				=	-Wall -Wextra -Werror -pedantic -std=c++11 -stdlib=libc++ #-g3
 IFLAGS				=	-I./$(INC_DIR)
-LDFLAGS				=	
+LDFLAGS				=
 
 $(NAME):			$(INC) $(OBJ)
 					$(CC) $(LDFLAGS) $(OBJ) -o $@
