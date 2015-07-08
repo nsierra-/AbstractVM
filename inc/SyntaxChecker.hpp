@@ -50,6 +50,16 @@ class   SyntaxChecker
 				std::string             line;
 		};
 
+		class   EmptyProgramException : public SyntaxCheckerException
+		{
+			public:
+				EmptyProgramException();
+				EmptyProgramException(EmptyProgramException const &src);
+				virtual ~EmptyProgramException(void) throw();
+
+				virtual const char * what() const throw();
+		};
+
 		class   NoEndTokenException : public SyntaxCheckerException
 		{
 			public:
@@ -116,6 +126,7 @@ class   SyntaxChecker
 		InstructionVector			_instructionsIndex;
 
 		InvalidInstructionException	_invalidInstructionEx;
+		EmptyProgramException		_emptyProgramEx;
 		NoEndTokenException			_noEndTokenEx;
 		NeedlessEndTokenException	_needlessEndTokenEx;
 		InvalidValueException		_invalidValueEx;

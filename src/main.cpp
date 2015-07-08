@@ -18,14 +18,5 @@ int                 main(int ac, const char **av)
 {
 	AbstractVM      avm;
 
-	if (ac == 2)
-	{
-		avm.setInputFile(av[1]);
-		avm.checkFileIntegrity();
-	}
-	else if (ac == 1)
-		avm.getProgramFromStdin();
-	else
-		std::cout << "kek" << std::endl;
-	return EXIT_SUCCESS;
+	return avm.doTheJob(ac, av);
 }

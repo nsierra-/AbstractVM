@@ -22,14 +22,16 @@ class	AbstractVM
 		AbstractVM();
 		~AbstractVM(void);
 		AbstractVM(AbstractVM const & src);
-		AbstractVM &operator=(AbstractVM const & rhs);
+		AbstractVM &	operator=(AbstractVM const & rhs);
 
-		void			setInputFile(const std::string & filename);
-		void			checkFileIntegrity(void);
-		void			getProgramFromStdin(void);
+		int				doTheJob(int, const char **);
+		void			setInputFile(const std::string &);
+		void			getProgram(void (SyntaxChecker::*)());
 
 	private:
 		SyntaxChecker   _syntaxChecker;
+
+		int				_executeProgram(void);
 };
 
 #endif /* ABSTRACTVM_HPP */

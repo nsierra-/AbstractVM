@@ -2,7 +2,7 @@
 //             .'         `.
 //            :             :        File       : SyntaxChecker.cpp
 //           :               :       Creation   : 2015-07-08 02:51:23
-//           :      _/|      :       Last Edit  : 2015-07-08 04:11:28
+//           :      _/|      :       Last Edit  : 2015-07-08 08:19:20
 //            :   =/_/      :        Author     : nsierra-
 //             `._/ |     .'         Mail       : nsierra-@student.42.fr
 //          (   /  ,|...-'
@@ -154,16 +154,11 @@ void        SyntaxChecker::analyzeStdin(void)
 {
 	std::ifstream   infile(_filename);
 	std::string     line;
-	size_t          lineNumber;
+	unsigned		lineNumber = 1;
 
-	if (!infile.good())
-	{
-		_fileOpeningFailEx.file = _filename;
-		throw _fileOpeningFailEx;
-	}
 	_tokens.clear();
 
-	while (std::getline(infile, line))
+	while (std::getline(std::cin, line))
 	{
 
 		if (!_instructionIsValid(line, lineNumber))
@@ -174,18 +169,19 @@ void        SyntaxChecker::analyzeStdin(void)
 		}
 
 		if (_endTokenFound)
-		{
-			_needlessEndTokenEx.lineNumber = lineNumber;
-			_needlessEndTokenEx.line = line;
-			throw _needlessEndTokenEx;
-		}
+			break ;
+
 		++lineNumber;
 	}
 
 	if (lineNumber == 1)
+		throw _emptyProgramEx;
+
+	if (!_endTokenFound)
 	{
-		_fileOpeningFailEx.file = _filename;
-		throw _fileOpeningFailEx;
+		_noEndTokenEx.lineNumber = lineNumber;
+		_noEndTokenEx.line = line;
+		throw _noEndTokenEx;
 	}
 	_valid = true;
 }
@@ -209,7 +205,7 @@ bool                        SyntaxChecker::_valueValidation(const std::smatch &m
 		return false;
 
 	_tokens.push_back(matches[i]);
-	for (auto &tok : sm)
+	for (auto & tok : sm)
 	{
 		if (j == 0 && (j = 1))
 			continue ;
@@ -221,5 +217,5 @@ bool                        SyntaxChecker::_valueValidation(const std::smatch &m
 
 void                        SyntaxChecker::setFile(const std::string & filename) { _filename = filename; }
 
-std::vector<std::string>    &SyntaxChecker::getTokens(void) { return _tokens; }
+std::vector<std::string> &	SyntaxChecker::getTokens(void) { return _tokens; }
 bool                        SyntaxChecker::isValid(void) const  { return _valid; }

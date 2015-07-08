@@ -2,7 +2,7 @@
 //             .'         `.
 //            :             :        File       : SyntaxCheckerExceptions.cpp
 //           :               :       Creation   : 2015-07-08 03:37:51
-//           :      _/|      :       Last Edit  : 2015-07-08 03:44:12
+//           :      _/|      :       Last Edit  : 2015-07-08 08:20:58
 //            :   =/_/      :        Author     : nsierra-
 //             `._/ |     .'         Mail       : nsierra-@student.42.fr
 //          (   /  ,|...-'
@@ -168,4 +168,24 @@ const char *	SyntaxChecker::FileOpeningFailException::what() const throw()
 		<< "Error while opening file. Please check you entered a valid path."
 	;
 	return ss.str().c_str();
+}
+
+SyntaxChecker::EmptyProgramException::EmptyProgramException()
+{
+
+}
+
+SyntaxChecker::EmptyProgramException::EmptyProgramException(SyntaxChecker::EmptyProgramException const & src)
+{
+	*this = src;
+}
+
+SyntaxChecker::EmptyProgramException::~EmptyProgramException(void) throw()
+{
+
+}
+
+const char *	SyntaxChecker::EmptyProgramException::what() const throw()
+{
+	return "Program seems empty.";
 }
